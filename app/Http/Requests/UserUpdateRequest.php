@@ -1,0 +1,68 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Library\ResponseJson;
+
+class UserUpdateRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+          'name' => 'required|regex:/^([a-zA-ZÃ±Ã‘Ã¡Ã©Ã­Ã³ÃºÃÃ‰ÃÃ“Ãš_-])+((\s*)+([a-zA-ZÃ±Ã‘Ã¡Ã©Ã­Ã³ÃºÃÃ‰ÃÃ“Ãš_-]*)*)+$/',
+          'email' => 'required|email|unique:users,email,'.$this->getSegmentFromEnd().',id',
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'name' => 'Nombre',
+            'email' => 'Correo Electrónico'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+          'name.required' => 'El campo :attribute es requerido.',
+          'name.regex' => 'El campo :attribute debe ser solo letras.',
+          'email.required' => 'El campo :attribute es requerido.',
+          'email.email' => 'El campo :attribute debe ser un correo valido.',
+          'email.unique' => 'El campo :attribute ya esta registrado en nuestro sistema.',
+      ];
+    }
+
+    private function getSegmentFromEnd($position_from_end = 1)
+    {
+        $segments =$this->segments();
+        return $segments[sizeof($segments) - $position_from_end];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        return ResponseJson::errorRequest($validator->errors());
+    }
+}

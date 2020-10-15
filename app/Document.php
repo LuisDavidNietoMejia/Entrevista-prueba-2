@@ -14,4 +14,8 @@ class Document extends Authenticatable
         'content','user_id','created_by', 'modified_by',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo('App\Document');
+    }
 }

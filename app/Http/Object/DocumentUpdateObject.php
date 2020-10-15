@@ -5,6 +5,7 @@ namespace App\Http\Object;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Document;
+use App\Events\UserDocumentEvent;
 
 class DocumentUpdateObject
 {
@@ -28,5 +29,10 @@ class DocumentUpdateObject
 
     public function getModel(){
         return $this->document_model;
+    }
+
+    public function eventPush()
+    {
+        event(new UserDocumentEvent('Tiene un nuevo documento disponible con el siguiente contenido: '.$this->content, $this->user_id));
     }
 }

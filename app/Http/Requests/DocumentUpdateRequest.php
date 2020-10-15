@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Library\ResponseJson;
 
-class UserUpdateRequest extends FormRequest
+class DocumentUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -67,6 +67,7 @@ class DocumentController extends Controller
                 $DocumentUpdateData = new DocumentUpdateData($DocumentUpdateObject->getArrayData(),$DocumentUpdateObject->getModel());
                 $updatedFlag = $DocumentUpdateData->update();
                 if ($updatedFlag) {
+                    $DocumentUpdateObject->eventPush();
                     $message = "Documento actualizado con exito";
                     DB::commit();
                     return ResponseJson::success(['success'=> $message]);
